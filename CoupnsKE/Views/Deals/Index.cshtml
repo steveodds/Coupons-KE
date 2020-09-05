@@ -1,0 +1,65 @@
+﻿@model IEnumerable<CouponsKE.Models.Deals>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DealName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DealDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DealRating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Store)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OldPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NewPrice)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Store)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OldPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NewPrice)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DealsID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.DealsID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.DealsID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
