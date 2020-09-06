@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace CoupnsKE.Enum
 {
-    public enum Roles
+    public enum Gender
     {
-        Administrator,
-        Moderator,
-        User
+        Male,
+        Female
     }
 }
