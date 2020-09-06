@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CoupnsKE.Data;
 using CouponsKE.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CoupnsKE.Controllers
 {
+    [Authorize]
     public class TrackedPricesController : Controller
     {
         private readonly ApplicationDbContext _context;
