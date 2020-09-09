@@ -18,11 +18,11 @@ namespace CoupnsKE.Services
         public Task Execute(string subject, string message, string email)
         {
             var client = new RestClient();
-            client.BaseUrl = new Uri("https://api.mailgun.net/v3/sandboxe2699fd52df14274999de029fc67d28e.mailgun.org");
+            client.BaseUrl = new Uri("https://api.eu.mailgun.net/v3/mail.couponske.codes");
             client.Authenticator = new HttpBasicAuthenticator("api", "***REMOVED***");
             var request = new RestRequest();
             request.AddParameter("domain", "www.couponske.codes", ParameterType.UrlSegment);
-            request.Resource = "{domain}/messages";
+            request.Resource = "{domain}/mail";
             request.AddParameter("from", "Steve from CouponsKE <no-reply@couponske.codes>");
             request.AddParameter("to", email);
             request.AddParameter("to", "admin@couponske.codes");
