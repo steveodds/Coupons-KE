@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using CoupnsKE.Services;
 
 namespace CoupnsKE
 {
@@ -33,6 +35,9 @@ namespace CoupnsKE
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<Areas.Identity.Data.CoupnsKEUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<CoupnsKEContext>();
+
+            services.AddTransient<IEmailSender, EmailSender>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
