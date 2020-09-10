@@ -22,7 +22,7 @@ namespace CoupnsKE.Areas.Identity.Pages.Account
         private readonly SignInManager<CoupnsKEUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<CoupnsKEUser> signInManager, 
+        public LoginModel(SignInManager<CoupnsKEUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<CoupnsKEUser> userManager)
         {
@@ -76,19 +76,20 @@ namespace CoupnsKE.Areas.Identity.Pages.Account
         {
             //returnUrl ??= Url.Content("~/");
 
-            returnUrl ??= "https://www.couponske.codes";
-
+            returnUrl ??= Url.Content("~/");
+            ModelState.AddModelError(string.Empty, $"Tried to load {returnUrl}");
+            return Page();
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+
                 var checkUser = _userManager.FindByEmailAsync(Input.Email);
                 var result = await _signInManager.PasswordSignInAsync(checkUser.Result.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
                     //return LocalRedirect(returnUrl);
-                    return RedirectToAction("Index", "Home");
                 }
                 if (result.RequiresTwoFactor)
                 {
