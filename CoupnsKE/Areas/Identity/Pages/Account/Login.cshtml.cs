@@ -74,7 +74,9 @@ namespace CoupnsKE.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            //returnUrl ??= Url.Content("~/");
+
+            returnUrl ??= "https://www.couponske.codes";
 
             if (ModelState.IsValid)
             {
