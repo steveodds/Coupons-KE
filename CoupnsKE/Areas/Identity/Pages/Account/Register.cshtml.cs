@@ -58,7 +58,7 @@ namespace CoupnsKE.Areas.Identity.Pages.Account
             public DateTime DOB { get; set; }
 
             [Required]
-            [Display(Name = "Gender (This is used for product recommendations)")]
+            [Display(Name = "Gender (Only used for recommendations)")]
             [DataType(DataType.Text)]
             public Gender Gender { get; set; }
 
