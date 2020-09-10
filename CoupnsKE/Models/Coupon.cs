@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace CouponsKE.Models
     public class Coupon
     {
         public Guid CouponID { get; set; }
-        public Guid StoreID { get; set; }
+        public string Store { get; set; }
 
         [Display(Name = "Category")]
         public string CouponCategory { get; set; }
@@ -28,12 +29,7 @@ namespace CouponsKE.Models
         [Display(Name = "T&Cs")]
         public string Restrictions { get; set; }
 
-        [NotMapped]
-        public string StoreName { get; private set; }
-
-        public void SetStoreName(string store)
-        {
-            StoreName = store;
-        }
+        [Display(Name = "Link")]
+        public string CouponUrl { get; set; }
     }
 }
