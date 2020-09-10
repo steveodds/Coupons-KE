@@ -33,7 +33,10 @@ namespace CoupnsKE
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<Areas.Identity.Data.CoupnsKEUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<Areas.Identity.Data.CoupnsKEUser>(options => { 
+                options.SignIn.RequireConfirmedAccount = true;
+                options.User.RequireUniqueEmail = true;
+            })
                 .AddEntityFrameworkStores<CoupnsKEContext>();
 
             services.AddTransient<IEmailSender, EmailSender>();
