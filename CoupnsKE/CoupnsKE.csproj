@@ -1,8 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-CoupnsKE-DEF5861D-491D-4453-B2E3-DDD2A04C633F</UserSecretsId>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
