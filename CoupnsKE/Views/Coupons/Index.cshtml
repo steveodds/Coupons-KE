@@ -9,23 +9,41 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<div class="card">
-    <div class="card-body">
-        <div class="card-deck">
+<div class="card-deck">
 
-            @foreach (var item in Model)
-            {
-                <div class="card">
-                    <img class="card-img-top" src="..." alt="@Html.DisplayFor(modelItem => item.Store) Coupon">
-                    <div class="card-body">
-                        <h4 class="card-title">@Html.DisplayFor(modelItem => item.Description)</h4>
-                        <p class="card-text">@Html.DisplayFor(modelItem => item.Restrictions). Expires on: @Html.DisplayFor(modelItem => item.ExpiryDate). Type: @Html.DisplayFor(modelItem => item.CouponCategory) </p>
-                        <a href="@Html.DisplayFor(modelItem => item.CouponUrl)" class="btn btn-primary" target="_blank"> USE &rarr;</a>
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title text-center"><img src="~/img/icons/jumia.png" width="50" height="50" alt="@Html.DisplayFor(modelItem => item.Store) Coupon">@Html.DisplayFor(modelItem => item.StoreSeller)</h4>
+                <h4 class="card-title">@Html.DisplayFor(modelItem => item.Description)</h4>
+                <p class="card-text">@Html.DisplayFor(modelItem => item.Restrictions). Expires on: @Html.DisplayFor(modelItem => item.ExpiryDate).</p>
+                <p class="card-text text-info">Type: @Html.DisplayFor(modelItem => item.CouponCategory)</p>
+                <p class="card-text"><small class="text-muted">Only valid on @Html.DisplayFor(modelItem => item.Store).</small></p>
+                <a class="btn btn-primary text-white" data-toggle="modal" data-target="#couponModal"> USE &rarr;</a>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">@Html.DisplayFor(modelItem => item.Store) Coupon</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>The coupon has been copied to your clipboard. Pick a product from the next page and use the code at checkout.</p>
+                        <p><h1><strong>@Html.DisplayFor(modelItem => item.CouponCode)</strong></h1></p>
+                    </div>
+                    <div class="modal-footer">
+                        <a target="_blank" href="@Html.DisplayFor(modelItem => item.CouponUrl)" class="btn btn-primary">Launch @Html.DisplayFor(modelItem => item.Store)</a>
                     </div>
                 </div>
-            }
-
+            </div>
         </div>
-    </div>
-</div>
+    }
 
+</div>
