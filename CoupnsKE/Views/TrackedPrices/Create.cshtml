@@ -4,37 +4,13 @@
     ViewData["Title"] = "Create";
 }
 
-<h4 class="text-center">Search for a product to save</h4>
+<h1>Create</h1>
+
+<h4>TrackedPrice</h4>
 <hr />
-<div class="input-group mb-3">
-    <div class="input-group-prepend">
-        <div class="input-group-text">
-            <i class="fa fa-search"></i>
-        </div>
-    </div>
-    <input type="text" class="form-control" placeholder="Enter search item" aria-label="Search item" aria-describedby="basic-addon2">
-    <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button">Search</button>
-    </div>
-</div>
-<div class="row text-center">
-    <div class="col-md-3"></div>
-    <div class="form-check col-md-2">
-        <input type="checkbox" class="form-check-input" id="searchJumia">
-        <label class="form-check-label" for="searchJumia">Jumia</label>
-    </div>
-    <div class="form-check col-md-2">
-        <input type="checkbox" class="form-check-input" id="searchKilimall">
-        <label class="form-check-label" for="searchKilimall">Kilimall</label>
-    </div>
-    <div class="form-check col-md-2">
-        <input type="checkbox" class="form-check-input" id="searchMasoko">
-        <label class="form-check-label" for="searchMasoko">Masoko</label>
-    </div>
-    <div class="col-md-3"></div>
-
-
-    @*<form asp-action="Create">
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserID" class="control-label"></label>
@@ -64,7 +40,8 @@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
-        </form>*@
+        </form>
+    </div>
 </div>
 
 <div>
