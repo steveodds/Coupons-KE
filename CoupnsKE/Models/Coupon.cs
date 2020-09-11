@@ -31,5 +31,8 @@ namespace CouponsKE.Models
 
         [Display(Name = "Link")]
         public string CouponUrl { get; set; }
+
+        [Display(Name = "Seller")]
+        public string? StoreSeller { get; set; }
     }
 }

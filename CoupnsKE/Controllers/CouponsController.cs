@@ -87,7 +87,7 @@ namespace CoupnsKE.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("CouponID,Store,CouponCategory,CouponCode,Description,ExpiryDate,Restrictions,CouponUrl")] Coupon coupon)
+        public async Task<IActionResult> Edit(Guid id, [Bind("CouponID,Store,CouponCategory,CouponCode,Description,ExpiryDate,Restrictions,CouponUrl,StoreSeller")] Coupon coupon)
         {
             if (id != coupon.CouponID)
             {
