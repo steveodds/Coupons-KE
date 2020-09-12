@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+    var cardCounter = 1;
 }
 
 <h4 class="text-center">Latest Coupons</h4>
@@ -40,7 +41,13 @@
                     </div>
                     <div class="modal-body">
                         <p>Copy the following code. Pick a product from the next page and use the code at checkout.</p>
-                        <p><h1><strong>@Html.DisplayFor(modelItem => item.CouponCode)</strong></h1></p>
+                        <p>
+                            <h1>
+                                <strong>
+                                    <input type="text" readonly class="form-control-plaintext" id="couponCode" value="@Html.DisplayFor(modelItem => item.CouponCode)">
+                                </strong>
+                            </h1>
+                        </p>
                     </div>
                     <div class="modal-footer">
                         <a target="_blank" href="@Html.DisplayFor(modelItem => item.CouponUrl)" class="btn btn-primary">Launch @Html.DisplayFor(modelItem => item.Store)</a>
@@ -48,6 +55,14 @@
                 </div>
             </div>
         </div>
+
+        @if (cardCounter % 4 == 0)
+        {
+        @Html.Raw("\n</div>\n")
+        @Html.Raw("\n<div class=\"card - deck\">\n")
+        }
+
+        cardCounter++;
     }
 
 </div>
