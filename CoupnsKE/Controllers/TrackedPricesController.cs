@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using CoupnsKE.Data;
 using CouponsKE.Models;
 using Microsoft.AspNetCore.Authorization;
+using CoupnsKE.Services.Web.Interfaces;
+using System.Net.Http;
+using CoupnsKE.Services.Web.Scraper;
 
 namespace CoupnsKE.Controllers
 {
@@ -15,10 +18,12 @@ namespace CoupnsKE.Controllers
     public class TrackedPricesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IScraper _scraper;
 
-        public TrackedPricesController(ApplicationDbContext context)
+        public TrackedPricesController(ApplicationDbContext context, IScraper scraper)
         {
             _context = context;
+            _scraper = scraper;
         }
 
         // GET: TrackedPrices
@@ -147,6 +152,34 @@ namespace CoupnsKE.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        //GET: Alternative section for using existing links
+        public IActionResult ProductLink()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ProductLink(string? url)
+        {
+            if (url == null)
+                return View();
+
+            string htmlDocument;
+            using (var client = new HttpClient())
+            {
+                using (var response = client.GetAsync(url).Result)
+                {
+                    using (var content = response.Content)
+                    {
+                        htmlDocument = content.ReadAsStringAsync().Result;
+                    }
+                }
+            }
+            var product = await _scraper.GetSingleProductAsync(htmlDocument);
+            return View(product);
+        }
+
 
         private bool TrackedPriceExists(Guid id)
         {
