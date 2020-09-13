@@ -1,0 +1,48 @@
+﻿@model CouponsKE.Models.Product
+@{
+    ViewData["Title"] = "ProductLink";
+}
+
+<h4 class="text-center">Enter a product link</h4>
+<hr />
+<form asp-action="ProductLink">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <i class="fa fa-search"></i>
+            </div>
+        </div>
+        <input type="text" class="form-control" name="url" placeholder="Enter url" autocomplete="off" aria-label="Search item" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Load</button>
+        </div>
+    </div>
+    <div class="text-center">
+        <a asp-action="Create">Search for a product instead.</a>
+        @*<div class="col-md-3"></div>
+            <div class="form-check col-md-2">
+                <input type="checkbox" class="form-check-input" id="searchJumia">
+                <label class="form-check-label" for="searchJumia">Jumia</label>
+            </div>
+            <div class="form-check col-md-2">
+                <input type="checkbox" class="form-check-input" id="searchKilimall">
+                <label class="form-check-label" for="searchKilimall">Kilimall</label>
+            </div>
+            <div class="form-check col-md-2">
+                <input type="checkbox" class="form-check-input" id="searchMasoko">
+                <label class="form-check-label" for="searchMasoko">Masoko</label>
+            </div>
+            <div class="col-md-3"></div>*@
+    </div>
+</form>
+@if (Model != null)
+{
+    <p>
+        @Model.ProductName
+        @Model.ProductDescription
+        @Model.ProductCategory
+        @Model.Price
+        @Model.SKU
+        <img src="@Model.ImageUrl" />
+    </p>
+}
