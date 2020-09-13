@@ -15,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using CoupnsKE.Services;
+using CoupnsKE.Services.Web.Interfaces;
+using CoupnsKE.Services.Web.Scraper;
 
 namespace CoupnsKE
 {
@@ -40,6 +42,7 @@ namespace CoupnsKE
                 .AddEntityFrameworkStores<CoupnsKEContext>();
 
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IScraper, ProductScraper>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
