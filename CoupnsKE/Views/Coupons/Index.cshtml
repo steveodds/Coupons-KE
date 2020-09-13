@@ -15,7 +15,7 @@
 
     @foreach (var item in Model)
     {
-        <div class="card">
+        <div class="card h-100">
             <div class="card-body">
                 <h4 class="card-title text-center"><img src="~/img/icons/jumia.png" width="50" height="50" alt="@Html.DisplayFor(modelItem => item.Store) Coupon">@Html.DisplayFor(modelItem => item.StoreSeller)</h4>
                 <h4 class="card-title">@Html.DisplayFor(modelItem => item.Description)</h4>
