@@ -15,19 +15,19 @@
 
     @foreach (var item in Model)
     {
-        <div class="card h-100">
-            <div class="card-body">
-                <h4 class="card-title text-center"><img src="~/img/icons/jumia.png" width="50" height="50" alt="@Html.DisplayFor(modelItem => item.Store) Coupon">@Html.DisplayFor(modelItem => item.StoreSeller)</h4>
-                <h4 class="card-title">@Html.DisplayFor(modelItem => item.Description)</h4>
-                <p class="card-text">@Html.DisplayFor(modelItem => item.Restrictions). Expires on: @Html.DisplayFor(modelItem => item.ExpiryDate).</p>
-                <p class="card-text text-info">Type: @Html.DisplayFor(modelItem => item.CouponCategory)</p>
-                <p class="card-text"><small class="text-muted">Only valid on @Html.DisplayFor(modelItem => item.Store).</small></p>
-                <div class="card-footer clearfix text-center">
-                    <a class="btn btn-primary text-white float-left" data-toggle="modal" data-target="#couponModal"> USE &rarr;</a>
-                    <a class="btn btn-success float-right" href="#"> SAVE </a>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title text-center"><img src="~/img/icons/jumia.png" width="50" height="50" alt="@Html.DisplayFor(modelItem => item.Store) Coupon">@Html.DisplayFor(modelItem => item.StoreSeller)</h4>
+            <h4 class="card-title">@Html.DisplayFor(modelItem => item.Description)</h4>
+            <p class="card-text">@Html.DisplayFor(modelItem => item.Restrictions). Expires on: @Html.DisplayFor(modelItem => item.ExpiryDate).</p>
+            <p class="card-text text-info">Type: @Html.DisplayFor(modelItem => item.CouponCategory)</p>
+            <p class="card-text"><small class="text-muted">Only valid on @Html.DisplayFor(modelItem => item.Store).</small></p>
         </div>
+        <div class="card-footer clearfix text-center">
+            <a class="btn btn-primary text-white float-left" data-toggle="modal" data-target="#couponModal"> USE &rarr;</a>
+            <a class="btn btn-success float-right" href="#"> SAVE </a>
+        </div>
+    </div>
 
         <!-- Modal -->
         <div class="modal fade" id="couponModal" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
