@@ -14,7 +14,10 @@ namespace CouponsKE.Models
         public string ProductName { get; set; }
         [Display(Name = "Category")]
         public string ProductCategory { get; set; }
-        public Guid StoreID { get; set; }
+        [Display(Name = "Description")]
+        public string ProductDescription { get; set; }
+        public string ImageUrl { get; set; }
+        public string StoreName { get; set; }
         public string SKU { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
