@@ -145,7 +145,6 @@ namespace CoupnsKE.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
         private bool CouponExists(Guid id)
         {
             return _context.Coupon.Any(e => e.CouponID == id);
