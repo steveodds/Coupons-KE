@@ -19,6 +19,8 @@ namespace CouponsKE.Models
         public string ImageUrl { get; set; }
         public string StoreName { get; set; }
         public string SKU { get; set; }
+        [Display(Name ="Original Link")]
+        public string StoreLink { get; set; }
 
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
