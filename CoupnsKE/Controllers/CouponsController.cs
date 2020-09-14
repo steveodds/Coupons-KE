@@ -7,16 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CoupnsKE.Data;
 using CouponsKE.Models;
+using Microsoft.AspNetCore.Identity;
+using CoupnsKE.Areas.Identity.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace CoupnsKE.Controllers
 {
     public class CouponsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<CoupnsKEUser> _userManager;
+        private readonly bool isAuthorized = false;
 
-        public CouponsController(ApplicationDbContext context)
+        public CouponsController(ApplicationDbContext context, UserManager<CoupnsKEUser> userManager, IHttpContextAccessor contextAccessor)
         {
             _context = context;
+            _userManager = userManager;
+            isAuthorized = _userManager.GetUserAsync(contextAccessor.HttpContext.User).Result.UserRole == Enum.Roles.Administrator;
         }
 
         // GET: Coupons
@@ -28,7 +35,10 @@ namespace CoupnsKE.Controllers
         // GET: Coupons/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null)
+            if (!isAuthorized)
+                return NotFound();
+
+            if (id == null || !isAuthorized)
             {
                 return NotFound();
             }
@@ -46,6 +56,8 @@ namespace CoupnsKE.Controllers
         // GET: Coupons/Create
         public IActionResult Create()
         {
+            if (!isAuthorized)
+                return NotFound();
             return View();
         }
 
@@ -56,6 +68,9 @@ namespace CoupnsKE.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CouponID,Store,CouponCategory,CouponCode,Description,ExpiryDate,Restrictions,CouponUrl")] Coupon coupon)
         {
+            if (!isAuthorized)
+                return NotFound();
+
             if (ModelState.IsValid)
             {
                 coupon.CouponID = Guid.NewGuid();
@@ -69,7 +84,7 @@ namespace CoupnsKE.Controllers
         // GET: Coupons/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null)
+            if (id == null || !isAuthorized)
             {
                 return NotFound();
             }
@@ -89,6 +104,9 @@ namespace CoupnsKE.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, [Bind("CouponID,Store,CouponCategory,CouponCode,Description,ExpiryDate,Restrictions,CouponUrl,StoreSeller")] Coupon coupon)
         {
+            if (!isAuthorized)
+                return NotFound();
+
             if (id != coupon.CouponID)
             {
                 return NotFound();
@@ -120,7 +138,7 @@ namespace CoupnsKE.Controllers
         // GET: Coupons/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
-            if (id == null)
+            if (id == null || !isAuthorized)
             {
                 return NotFound();
             }
@@ -140,6 +158,8 @@ namespace CoupnsKE.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
+            if (!isAuthorized)
+                return NotFound();
             var coupon = await _context.Coupon.FindAsync(id);
             _context.Coupon.Remove(coupon);
             await _context.SaveChangesAsync();
