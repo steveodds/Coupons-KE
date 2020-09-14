@@ -177,6 +177,7 @@ namespace CoupnsKE.Controllers
                 }
             }
             var product = await _scraper.GetSingleProductAsync(htmlDocument);
+            product.StoreLink = url;
             return View(product);
         }
 
