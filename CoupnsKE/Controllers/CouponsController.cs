@@ -29,6 +29,7 @@ namespace CoupnsKE.Controllers
         // GET: Coupons
         public async Task<IActionResult> Index()
         {
+            ViewData["isAuthorised"] = isAuthorized;
             return View(await _context.Coupon.ToListAsync());
         }
 
