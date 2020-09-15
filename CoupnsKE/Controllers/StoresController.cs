@@ -54,7 +54,7 @@ namespace CoupnsKE.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StoreID,StoreName,StoreReflink")] Store store)
+        public async Task<IActionResult> Create([Bind("StoreID,StoreName,StoreReflinkStart,StoreReflinkEnd")] Store store)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace CoupnsKE.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("StoreID,StoreName,StoreReflink")] Store store)
+        public async Task<IActionResult> Edit(Guid id, [Bind("StoreID,StoreName,StoreReflinkStart,StoreReflinkEnd")] Store store)
         {
             if (id != store.StoreID)
             {
