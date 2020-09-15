@@ -8,7 +8,7 @@ namespace CoupnsKE.Services.Web.Interfaces
 {
     public interface IScraper
     {
-        Task<Product> GetSingleProductAsync(string htmlDocument);
-        Task<List<Product>> GetMultipleProductsAsync(string htmlDocument, int? productLimit, int? sellerLimit);
+        Task<Product> GetSingleProductAsync(string url, string htmlDocument);
+        Task<List<Product>> GetMultipleProductsAsync(string url, string htmlDocument, int? productLimit, int? sellerLimit);
     }
 }

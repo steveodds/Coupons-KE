@@ -7,6 +7,8 @@ using AngleSharp;
 using CouponsKE.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using CoupnsKE.Data;
+using Microsoft.Extensions.Logging;
 
 namespace CoupnsKE.Services.Web.Scraper
 {
@@ -16,24 +18,20 @@ namespace CoupnsKE.Services.Web.Scraper
         public int? ProductLimit { get; set; }
         public int? SellerLimit { get; set; }
         public List<string> Products { get; set; }
-        public ProductScraper()
+        private readonly ApplicationDbContext _context;
+        public ProductScraper(ApplicationDbContext context)
         {
-
+            _context = context;
         }
 
-        public ProductScraper(string htmlDocument)
-        {
-            HtmlDocument = htmlDocument;
-        }
-
-        public Task<List<Product>> GetMultipleProductsAsync(string htmlDocument, int? productLimit, int? sellerLimit)
+        public Task<List<Product>> GetMultipleProductsAsync(string url, string htmlDocument, int? productLimit, int? sellerLimit)
         {
             var context = BrowsingContext.New(Configuration.Default);
 
             return null;
         }
 
-        public async Task<Product> GetSingleProductAsync(string htmlDocument)
+        public async Task<Product> GetSingleProductAsync(string url, string htmlDocument)
         {
             var product = new Product();
 
@@ -50,6 +48,25 @@ namespace CoupnsKE.Services.Web.Scraper
             product = GetJSONElement(jsonFromHtml);
             product.SKU = sku;
             product.ProductCategory = category;
+            var referrals = new Referrals(url, _context);
+            product.StoreLink = referrals.ReferralLink();
+            product.StoreName = "Jumia"; //TODO: Place appropriate method for getting and setting storename
+            if(_context.Product.Where(x => x.SKU == product.SKU && x.StoreName == product.StoreName).Any())
+            {
+                try
+                {
+                    _context.Update(product);
+                    await _context.SaveChangesAsync();
+                    return product;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+            product.ProductID = new Guid();
+            var productSaver = _context.Product.Add(product);
+            await _context.SaveChangesAsync();
 
             return product;
         }
