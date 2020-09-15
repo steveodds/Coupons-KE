@@ -16,7 +16,10 @@
                 @Html.DisplayNameFor(model => model.StoreName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StoreReflink)
+                @Html.DisplayNameFor(model => model.StoreReflinkStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreReflinkEnd)
             </th>
             <th></th>
         </tr>
@@ -28,7 +31,10 @@
                 @Html.DisplayFor(modelItem => item.StoreName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StoreReflink)
+                @Html.DisplayFor(modelItem => item.StoreReflinkStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StoreReflinkEnd)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.StoreID">Edit</a> |
