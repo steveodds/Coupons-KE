@@ -51,10 +51,12 @@ namespace CoupnsKE.Services.Web.Scraper
             var referrals = new Referrals(url, _context);
             product.StoreLink = referrals.ReferralLink();
             product.StoreName = "Jumia"; //TODO: Place appropriate method for getting and setting storename
-            if(_context.Product.Where(x => x.SKU == product.SKU && x.StoreName == product.StoreName).Any())
+            if (_context.Product.Where(x => x.SKU == product.SKU && x.StoreName == product.StoreName).Any())
             {
+                var existingProduct = _context.Product.Where(x => x.SKU == product.SKU && x.StoreName == product.StoreName).FirstOrDefault();
                 try
                 {
+                    product.ProductID = existingProduct.ProductID;
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                     return product;
@@ -64,9 +66,13 @@ namespace CoupnsKE.Services.Web.Scraper
                     throw;
                 }
             }
-            product.ProductID = new Guid();
-            var productSaver = _context.Product.Add(product);
-            await _context.SaveChangesAsync();
+            else
+            {
+                product.ProductID = new Guid();
+                var productSaver = _context.Product.Add(product);
+                await _context.SaveChangesAsync();
+            }
+
 
             return product;
         }
