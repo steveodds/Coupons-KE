@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Authorization;
 using CoupnsKE.Services.Web.Interfaces;
 using System.Net.Http;
 using CoupnsKE.Services.Web.Scraper;
+using Microsoft.AspNetCore.Identity;
+using CoupnsKE.Areas.Identity.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace CoupnsKE.Controllers
 {
@@ -19,11 +22,17 @@ namespace CoupnsKE.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IScraper _scraper;
+        private readonly UserManager<CoupnsKEUser> _userManager;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public TrackedPricesController(ApplicationDbContext context, IScraper scraper)
+        public TrackedPricesController(ApplicationDbContext context, 
+            IScraper scraper, UserManager<CoupnsKEUser> userManager, 
+            IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _scraper = scraper;
+            _userManager = userManager;
+            _contextAccessor = contextAccessor;
         }
 
         // GET: TrackedPrices
@@ -178,6 +187,29 @@ namespace CoupnsKE.Controllers
             }
             var product = await _scraper.GetSingleProductAsync(url, htmlDocument);
             return View(product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(Guid productID, decimal desiredPrice)
+        {
+            var product = await _context.Product.FindAsync(productID);
+            var tracker = new TrackedPrice()
+            {
+                ProductID = product.ProductID,
+                DesiredPrice = desiredPrice,
+                LowestPrice = product.Price,
+                StoreWithLowestPrice = product.StoreName,
+                UserID = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result.Id,
+                TrackedPriceID = new Guid()
+            };
+
+            _context.TrackedPrice.Add(tracker);
+            await _context.SaveChangesAsync();
+            //var trackers = new List<TrackedPrice>();
+            //trackers.Add(tracker);
+
+            //return View(trackers);
+            return RedirectToAction("Index");
         }
 
 
