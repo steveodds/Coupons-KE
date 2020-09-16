@@ -10,7 +10,7 @@ namespace CouponsKE.Models
     public class TrackedPrice
     {
         public Guid TrackedPriceID { get; set; }
-        public Guid UserID { get; set; }
+        public string UserID { get; set; }
         public Guid ProductID { get; set; }
 
         [Display(Name = "Desired Price")]
