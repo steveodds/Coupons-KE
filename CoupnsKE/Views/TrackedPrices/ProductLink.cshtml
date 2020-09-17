@@ -19,48 +19,66 @@
     </div>
     <div class="text-center">
         <a asp-action="Create">Search for a product instead.</a>
-        @*<div class="col-md-3"></div>
-            <div class="form-check col-md-2">
-                <input type="checkbox" class="form-check-input" id="searchJumia">
-                <label class="form-check-label" for="searchJumia">Jumia</label>
-            </div>
-            <div class="form-check col-md-2">
-                <input type="checkbox" class="form-check-input" id="searchKilimall">
-                <label class="form-check-label" for="searchKilimall">Kilimall</label>
-            </div>
-            <div class="form-check col-md-2">
-                <input type="checkbox" class="form-check-input" id="searchMasoko">
-                <label class="form-check-label" for="searchMasoko">Masoko</label>
-            </div>
-            <div class="col-md-3"></div>*@
     </div>
 </form>
 <hr />
 @if (Model != null)
 {
     int descriptionLength = Model.ProductDescription.Length < 200 ? Model.ProductDescription.Length : 200;
-<form asp-action="Index">
-    <div class="card flex-md-row mb-4 box-shadow h-md-250">
-        <img class="card-img-right flex-auto d-none d-md-block" alt="Product image" style="width: 200px; height: 250px;" src="@Model.ImageUrl" data-holder-rendered="true">
-        <div class="card-body d-flex flex-column align-items-start">
-            <strong class="d-inline-block mb-2 text-primary">@Model.ProductCategory</strong>
-            <h3 class="mb-0">
-                <a class="text-dark" href="@Model.StoreLink">@Model.ProductName</a>
-            </h3>
-            <div class="mb-1 text-muted">SKU: @Model.SKU</div>
-            <p class="card-text mb-auto">@Model.ProductDescription.Substring(0, descriptionLength)...</p>
-            <div>
-                <text class="text-black font-weight-bold">Current price: KSh. <text class="card-text text-danger mb-auto">@Model.Price</text></text>
-                <div class="input-group mb-3">
-                    <input type="number" class="form-control" name="desiredPrice" placeholder="Enter desired price" aria-label="Desired Price" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="submit">Set</button>
+    <form asp-action="Index">
+        <div class="card flex-md-row mb-4 box-shadow h-md-250">
+            <img class="card-img-right flex-auto d-none d-md-block" alt="Product image" style="width: 250px; height: 250px;" src="@Model.ImageUrl" data-holder-rendered="true">
+            <div class="card-body d-flex flex-column align-items-start">
+                <strong class="d-inline-block mb-2 text-primary">@Model.ProductCategory</strong>
+                <h3 class="mb-0">
+                    <a class="text-dark" href="@Model.StoreLink">@Model.ProductName</a>
+                </h3>
+                <div class="mb-1 text-muted">SKU: @Model.SKU</div>
+                <p class="card-text mb-auto">@Model.ProductDescription.Substring(0, descriptionLength)...</p>
+                <div>
+                    <text class="text-black font-weight-bold">Current price: KSh. <text class="card-text text-danger mb-auto">@Model.Price</text></text>
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control" name="desiredPrice" placeholder="Enter desired price" aria-label="Desired Price" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit">Set</button>
+                        </div>
+                        <input type="hidden" name="productID" value="@Model.ProductID">
                     </div>
-                    <input type="hidden" name="productID" value="@Model.ProductID">
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
 }
-
+else
+{
+<div class="card-deck">
+    <div class="card border-dark mb-3" style="max-width: 18rem;">
+        <div class="card-header">Step 1</div>
+        <div class="card-body text-dark">
+            <h5 class="card-title">Find your product</h5>
+            <p class="card-text">Go to <a href="https://c.jumia.io/?a=230644&c=9&p=r&E=kkYNyk2M4sk%3D&ckmrdr=www.jumia.co.ke&utm_campaign=230644">www.jumia.co.ke</a> or one of our supported sites and search for a product. You can also check your wishlist.<p>
+        </div>
+    </div>
+    <div class="card border-dark mb-3" style="max-width: 18rem;">
+        <div class="card-header">Step 2</div>
+        <div class="card-body text-dark">
+            <h5 class="card-title">Get your product link/url</h5>
+            <p class="card-text">Pick a specific product and load its page. When the page is done loading, copy the url from your address bar.<p>
+        </div>
+    </div>
+    <div class="card border-dark mb-3" style="max-width: 18rem;">
+        <div class="card-header">Step 3</div>
+        <div class="card-body text-dark">
+            <h5 class="card-title">Load your product</h5>
+            <p class="card-text">Paste the url in the text above and press enter. The page will start loading and display your product.<p>
+        </div>
+    </div>
+    <div class="card border-dark mb-3" style="max-width: 18rem;">
+        <div class="card-header">Step 4</div>
+        <div class="card-body text-dark">
+            <h5 class="card-title">Start tracking!</h5>
+            <p class="card-text">Type in your desired price. When the price drops that low you'll be the first to know!<p>
+        </div>
+    </div>
+</div>
+}
