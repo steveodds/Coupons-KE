@@ -25,8 +25,8 @@ namespace CoupnsKE.Controllers
         private readonly UserManager<CoupnsKEUser> _userManager;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public TrackedPricesController(ApplicationDbContext context, 
-            IScraper scraper, UserManager<CoupnsKEUser> userManager, 
+        public TrackedPricesController(ApplicationDbContext context,
+            IScraper scraper, UserManager<CoupnsKEUser> userManager,
             IHttpContextAccessor contextAccessor)
         {
             _context = context;
@@ -192,23 +192,34 @@ namespace CoupnsKE.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(Guid productID, decimal desiredPrice)
         {
+            var tracker = new TrackedPrice();
             var product = await _context.Product.FindAsync(productID);
-            var tracker = new TrackedPrice()
+            var existingTracker = _context.TrackedPrice.Where(x => x.ProductID == product.ProductID);
+            if (existingTracker.Any())
             {
-                ProductID = product.ProductID,
-                DesiredPrice = desiredPrice,
-                LowestPrice = product.Price,
-                StoreWithLowestPrice = product.StoreName,
-                UserID = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result.Id,
-                TrackedPriceID = new Guid()
-            };
+                var updateTracker = existingTracker.FirstOrDefault();
+                updateTracker.DesiredPrice = desiredPrice;
+                if (updateTracker.LowestPrice > product.Price)
+                    updateTracker.LowestPrice = product.Price;
+                _context.TrackedPrice.Update(updateTracker);
+            }
+            else
+            {
+                tracker.DesiredPrice = desiredPrice;
+                tracker.LowestPrice = product.Price;
+                tracker.ProductID = product.ProductID;
+                tracker.StoreWithLowestPrice = product.StoreName;
+                tracker.TrackedPriceID = new Guid();
+                tracker.UserID = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result.Id;
+                _context.TrackedPrice.Add(tracker);
+            }
 
-            _context.TrackedPrice.Add(tracker);
+
             await _context.SaveChangesAsync();
             //var trackers = new List<TrackedPrice>();
             //trackers.Add(tracker);
 
-            //return View(trackers);
+            //return View();
             return RedirectToAction("Index");
         }
 
