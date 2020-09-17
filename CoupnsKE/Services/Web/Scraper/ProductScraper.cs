@@ -56,8 +56,9 @@ namespace CoupnsKE.Services.Web.Scraper
                 var existingProduct = _context.Product.Where(x => x.SKU == product.SKU && x.StoreName == product.StoreName).FirstOrDefault();
                 try
                 {
+                    existingProduct.Price = product.Price;
                     product.ProductID = existingProduct.ProductID;
-                    _context.Update(product);
+                    _context.Update(existingProduct);
                     await _context.SaveChangesAsync();
                     return product;
                 }
