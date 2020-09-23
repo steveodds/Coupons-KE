@@ -1,59 +1,31 @@
-﻿@model IEnumerable<CouponsKE.Models.TrackedPrice>
+﻿@model CoupnsKE.Controllers.TrackedPricesController.TrackedItems
 
 @{
     ViewData["Title"] = "Index";
+    var trackers = Model.trackers;
+    var products = Model.products;
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DesiredPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LowestPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StoreWithLowestPrice)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DesiredPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LowestPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StoreWithLowestPrice)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TrackedPriceID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TrackedPriceID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TrackedPriceID">Delete</a>
-            </td>
-        </tr>
+<h4>My Tracked Products</h4>
+<hr />
+<a asp-action="Create">Add New Products</a>
+@foreach (var tracker in trackers)
+{
+    var product = products.Where(x => x.ProductID == tracker.ProductID).FirstOrDefault();
+    int descriptionLength = product.ProductDescription.Length < 200 ? product.ProductDescription.Length : 200;
+    <div class="card flex-md-row mb-4 box-shadow h-md-250">
+        <img class="card-img-right flex-auto d-none d-md-block" alt="Product image" style="width: 250px; height: 250px;" src="@product.ImageUrl" data-holder-rendered="true">
+        <div class="card-body d-flex flex-column align-items-start">
+            <strong class="d-inline-block mb-2 text-primary">@product.ProductCategory</strong>
+            <h3 class="mb-0">
+                <a class="text-dark" target="_blank" href="@product.StoreLink">@product.ProductName</a>
+            </h3>
+            <div class="mb-1 text-muted">SKU: @product.SKU</div>
+            <p class="card-text mb-auto" title="@product.ProductDescription">@product.ProductDescription.Substring(0, descriptionLength)@if (descriptionLength > 200) { Html.Raw("..."); }</p>
+            <text class="text-black">Current price: <span class="badge badge-outline-danger">KSh. @product.Price</span></text>
+            <form asp-action="Details">
+                <input type="hidden" name="id" value="@tracker.TrackedPriceID" />
+                <text class="text-black">Desired Price: <span class="badge badge-outline-dark">KSh. @tracker.DesiredPrice</span> <button class="btn btn-sm" type="submit">Edit</button></text>
+            </form>
+        </div>
+    </div>
 }
-    </tbody>
-</table>
