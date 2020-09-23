@@ -38,7 +38,18 @@ namespace CoupnsKE.Controllers
         // GET: TrackedPrices
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TrackedPrice.ToListAsync());
+            var trackers = await _context.TrackedPrice.ToListAsync();
+            List<Product> products = new List<Product>();
+            foreach (var tracker in trackers)
+            {
+                products.Add(_context.Product.FindAsync(tracker.ProductID).Result);
+            }
+
+            var trackedItems = new TrackedItems();
+            trackedItems.products = products;
+            trackedItems.trackers = trackers;
+
+            return View(trackedItems);
         }
 
         // GET: TrackedPrices/Details/5
@@ -69,17 +80,41 @@ namespace CoupnsKE.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TrackedPriceID,UserID,ProductID,DesiredPrice,LowestPrice,StoreWithLowestPrice")] TrackedPrice trackedPrice)
+        public async Task<IActionResult> Create(string searchString)
         {
-            if (ModelState.IsValid)
+            if (searchString == null)
+                return View();
+
+            string url = GenerateSearchUrl(searchString, "Jumia");
+
+            string htmlDocument;
+            using (var client = new HttpClient())
             {
-                trackedPrice.TrackedPriceID = Guid.NewGuid();
-                _context.Add(trackedPrice);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                using (var response = client.GetAsync(url).Result)
+                {
+                    using (var content = response.Content)
+                    {
+                        htmlDocument = content.ReadAsStringAsync().Result;
+                    }
+                }
             }
-            return View(trackedPrice);
+            var productList = await _scraper.GetMultipleProductsAsync(url, htmlDocument, null, null);
+
+            return View(productList);
+        }
+
+        private string GenerateSearchUrl(string searchString, string store)
+        {
+            searchString = searchString.Trim().ToLower();
+            store = store.Trim().ToLower();
+            searchString = searchString.Replace(" ", "+");
+            switch (store)
+            {
+                case "jumia":
+                    return $@"https://www.jumia.co.ke/catalog/?q={searchString}&sort=highest-price&shipped_from=country_local";
+                default:
+                    return null;
+            }
         }
 
         // GET: TrackedPrices/Edit/5
@@ -227,6 +262,12 @@ namespace CoupnsKE.Controllers
         private bool TrackedPriceExists(Guid id)
         {
             return _context.TrackedPrice.Any(e => e.TrackedPriceID == id);
+        }
+
+        public class TrackedItems
+        {
+            public List<Product> products { get; set; }
+            public List<TrackedPrice> trackers { get; set; }
         }
     }
 }
