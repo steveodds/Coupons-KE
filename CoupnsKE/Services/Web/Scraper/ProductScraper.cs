@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using CoupnsKE.Data;
 using Microsoft.Extensions.Logging;
+using AngleSharp.Dom;
 
 namespace CoupnsKE.Services.Web.Scraper
 {
@@ -24,11 +25,39 @@ namespace CoupnsKE.Services.Web.Scraper
             _context = context;
         }
 
-        public Task<List<Product>> GetMultipleProductsAsync(string url, string htmlDocument, int? productLimit, int? sellerLimit)
+        public async Task<List<Product>> GetMultipleProductsAsync(string url, string htmlDocument, int? productLimit, int? sellerLimit)
         {
+            var productList = new List<Product>();
             var context = BrowsingContext.New(Configuration.Default);
+            var source = htmlDocument;
+            var document = await context.OpenAsync(req => req.Content(source));
+            var page = document.DocumentElement.OuterHtml;
 
-            return null;
+            var results = document.All.Where(m => m.LocalName == "article" && m.ClassList.Contains("prd"));
+            foreach (var result in results)
+            {
+                var temp = new Product();
+                temp.SKU = result.Children[0].GetAttribute("data-id");
+                temp.ProductCategory = result.Children[0].GetAttribute("data-category");
+                var priceTemp = result.Children[0].Children[1].Children[1].Text();
+                priceTemp = priceTemp.ToLower();
+                priceTemp = priceTemp.Replace("ksh", string.Empty);
+                priceTemp = priceTemp.Replace(",", string.Empty);
+                priceTemp = priceTemp.Trim();
+                temp.Price = Convert.ToDecimal(priceTemp);
+                temp.ProductName = result.Children[0].GetAttribute("data-name");
+                temp.StoreName = "Jumia"; //TODO: Get store in a proper way
+                var productUrl = $"www.jumia.co.ke{result.Children[0].GetAttribute("href")}";
+                var finalUrl = new Referrals(productUrl, _context);
+                temp.StoreLink = finalUrl.ReferralLink();
+                temp.ProductID = new Guid();
+                temp.ImageUrl = result.Children[0].Children[0].Children[0].GetAttribute("data-src");
+                temp.ProductDescription = "Not Loaded";
+
+                productList.Add(temp);
+            }
+
+            return productList;
         }
 
         public async Task<Product> GetSingleProductAsync(string url, string htmlDocument)
