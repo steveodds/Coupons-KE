@@ -31,10 +31,10 @@
             <div class="card-body d-flex flex-column align-items-start">
                 <strong class="d-inline-block mb-2 text-primary">@Model.ProductCategory</strong>
                 <h3 class="mb-0">
-                    <a class="text-dark" href="@Model.StoreLink">@Model.ProductName</a>
+                    <a class="text-dark" target="_blank" href="@Model.StoreLink">@Model.ProductName</a>
                 </h3>
                 <div class="mb-1 text-muted">SKU: @Model.SKU</div>
-                <p class="card-text mb-auto">@Model.ProductDescription.Substring(0, descriptionLength)...</p>
+                <p class="card-text mb-auto" title="@Model.ProductDescription">@Model.ProductDescription.Substring(0, descriptionLength)@if(descriptionLength > 200){ Html.Raw("..."); }</p>
                 <div>
                     <text class="text-black font-weight-bold">Current price: KSh. <text class="card-text text-danger mb-auto">@Model.Price</text></text>
                     <div class="input-group mb-3">
