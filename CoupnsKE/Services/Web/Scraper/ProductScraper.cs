@@ -39,7 +39,7 @@ namespace CoupnsKE.Services.Web.Scraper
                 var temp = new Product();
                 temp.SKU = result.Children[0].GetAttribute("data-id");
                 temp.ProductCategory = result.Children[0].GetAttribute("data-category");
-                var priceTemp = result.Children[0].Children[1].Children[1].Text();
+                var priceTemp = result.QuerySelectorAll("div").Where(m => m.ClassList.Contains("prc")).FirstOrDefault().Text();
                 priceTemp = priceTemp.ToLower();
                 priceTemp = priceTemp.Replace("ksh", string.Empty);
                 priceTemp = priceTemp.Replace(",", string.Empty);
