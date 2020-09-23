@@ -10,6 +10,7 @@ using CouponsKE.Models;
 using Microsoft.AspNetCore.Identity;
 using CoupnsKE.Areas.Identity.Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CoupnsKE.Controllers
 {
@@ -17,13 +18,15 @@ namespace CoupnsKE.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<CoupnsKEUser> _userManager;
+        private readonly IHttpContextAccessor _contextAccessor;
         private readonly bool isAuthorized = false;
 
         public CouponsController(ApplicationDbContext context, UserManager<CoupnsKEUser> userManager, IHttpContextAccessor contextAccessor)
         {
             _context = context;
             _userManager = userManager;
-            isAuthorized = _userManager.GetUserAsync(contextAccessor.HttpContext.User).Result.UserRole == Enum.Roles.Administrator;
+            _contextAccessor = contextAccessor;
+            isAuthorized = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result.UserRole == Enum.Roles.Administrator;
         }
 
         // GET: Coupons
@@ -166,6 +169,41 @@ namespace CoupnsKE.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> SaveCoupon(Guid couponID)
+        {
+            var coupon = await _context.Coupon.FindAsync(couponID);
+            var user = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result.Id;
+            var hasSavedCoupons = _context.UserCoupons.Where(x => x.UserID == user);
+            if (hasSavedCoupons.Any())
+            {
+                var existingSavedCoupons = hasSavedCoupons.FirstOrDefault();
+                if (existingSavedCoupons.Coupons.Where(x => x.CouponID == couponID).Any())
+                {
+                    return RedirectToAction("Index", "UserCoupons");
+                }
+                else
+                {
+                    existingSavedCoupons.Coupons.Add(coupon);
+                }
+                _context.Update(existingSavedCoupons);
+            }
+            else
+            {
+                var userCoupon = new UserCoupons
+                {
+                    Coupons = new List<Coupon> { coupon },
+                    UserID = user
+                };
+                _context.UserCoupons.Add(userCoupon);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "UserCoupons");
+        }
+
         private bool CouponExists(Guid id)
         {
             return _context.Coupon.Any(e => e.CouponID == id);
