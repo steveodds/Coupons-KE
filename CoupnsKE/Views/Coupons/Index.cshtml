@@ -27,8 +27,11 @@
                 <p class="card-text"><small class="text-muted">Only valid on @Html.DisplayFor(modelItem => item.Store).</small></p>
             </div>
             <div class="card-footer clearfix text-center">
-                <a class="btn btn-primary text-white float-left" data-toggle="modal" data-target="#couponModal-@cardCounter"> USE &rarr;</a>
-                <a class="btn btn-success float-right" href="#"> SAVE </a>
+                <form asp-action="SaveCoupon">
+                    <a class="btn btn-primary text-white float-left" data-toggle="modal" data-target="#couponModal-@cardCounter"> USE &rarr;</a>
+                    <button class="btn btn-success float-right" type="submit"> SAVE </button>
+                    <input type="hidden" name="couponID" value="@item.CouponID">
+                </form>
             </div>
         </div>
 
