@@ -43,6 +43,11 @@ namespace CoupnsKE.Services.Web.Scraper
                 temp.ProductCategory = result.Children[0].GetAttribute("data-category");
                 var priceTemp = result.QuerySelectorAll("div").Where(m => m.ClassList.Contains("prc")).FirstOrDefault().Text();
                 priceTemp = priceTemp.ToLower();
+                if (priceTemp.Contains('-'))
+                {
+                    var hyphenIndex = priceTemp.IndexOf('-');
+                    priceTemp = priceTemp.Substring(0, hyphenIndex - 2);
+                }
                 priceTemp = priceTemp.Replace("ksh", string.Empty);
                 priceTemp = priceTemp.Replace(",", string.Empty);
                 priceTemp = priceTemp.Trim();
@@ -50,8 +55,8 @@ namespace CoupnsKE.Services.Web.Scraper
                 temp.ProductName = result.Children[0].GetAttribute("data-name");
                 temp.StoreName = "Jumia"; //TODO: Get store in a proper way
                 var productUrl = $"www.jumia.co.ke{result.Children[0].GetAttribute("href")}";
-                var finalUrl = new Referrals(productUrl, _context);
-                temp.StoreLink = finalUrl.ReferralLink();
+                //var finalUrl = new Referrals(productUrl, _context);
+                temp.StoreLink = productUrl;
                 temp.ProductID = new Guid();
                 temp.ImageUrl = result.Children[0].Children[0].Children[0].GetAttribute("data-src");
                 temp.ProductDescription = "Not Loaded";
