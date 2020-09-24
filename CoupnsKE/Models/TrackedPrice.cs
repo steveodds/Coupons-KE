@@ -17,9 +17,10 @@ namespace CouponsKE.Models
         [Column(TypeName = "decimal(18, 2)")]
         public decimal DesiredPrice { get; set; }
 
-        [Display(Name = "Lowest Recorded Price")]
+        [Display(Name = "Lowest Price")]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal LowestPrice { get; set; }
+        [Display(Name = "Store")]
         public string StoreWithLowestPrice { get; set; }
     }
 }
