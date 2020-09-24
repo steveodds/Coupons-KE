@@ -38,6 +38,8 @@ namespace CoupnsKE.Services.Web.Scraper
             {
                 var temp = new Product();
                 temp.SKU = result.Children[0].GetAttribute("data-id");
+                if (temp.SKU is null)
+                    continue;
                 temp.ProductCategory = result.Children[0].GetAttribute("data-category");
                 var priceTemp = result.QuerySelectorAll("div").Where(m => m.ClassList.Contains("prc")).FirstOrDefault().Text();
                 priceTemp = priceTemp.ToLower();
