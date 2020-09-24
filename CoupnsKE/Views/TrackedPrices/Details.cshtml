@@ -2,47 +2,52 @@
 
 @{
     ViewData["Title"] = "Details";
+    var product = (CouponsKE.Models.Product)ViewData["product"];
 }
 
-<h1>Details</h1>
+@*<h1>My Tracked Product</h1>*@
 
 <div>
-    <h4>TrackedPrice</h4>
+    <h4>@product.ProductName</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserID)
+        <dt class="col-sm-2">
+            <img src="@product.ImageUrl" style="height:250px" alt="@product.ProductName" />
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserID)
+        <dd class="col-sm-10">
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductID)
+        <dt class="col-sm-2">
+            Description
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductID)
+        <dd class="col-sm-10">
+            @product.ProductDescription
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DesiredPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DesiredPrice)
-        </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.LowestPrice)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LowestPrice)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.StoreWithLowestPrice)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.StoreWithLowestPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DesiredPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DesiredPrice)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.TrackedPriceID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<form asp-action="Index">
+    <input type="hidden" name="productID" value="@product.ProductID" />
+    <div class="input-group mb-3">
+        <input type="number" class="form-control" name="desiredPrice" placeholder="New price" aria-label="Desired Price" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Edit desired price</button>
+        </div>
+    </div>
+</form>

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    var cardCounter = 1;
 }
 
 <h4 class="text-center">Search for a product to save</h4>
@@ -23,15 +24,15 @@
 <div class="row text-center">
     <div class="col-md-3"></div>
     <div class="form-check col-md-2">
-        <input type="checkbox" class="form-check-input" id="searchJumia">
+        <input type="checkbox" class="form-check-input disabled" checked="checked" id="searchJumia" disabled>
         <label class="form-check-label" for="searchJumia">Jumia</label>
     </div>
     <div class="form-check col-md-2">
-        <input type="checkbox" class="form-check-input" id="searchKilimall">
+        <input type="checkbox" class="form-check-input disabled" id="searchKilimall" disabled>
         <label class="form-check-label" for="searchKilimall">Kilimall</label>
     </div>
     <div class="form-check col-md-2">
-        <input type="checkbox" class="form-check-input" id="searchMasoko">
+        <input type="checkbox" class="form-check-input disabled" id="searchMasoko" disabled>
         <label class="form-check-label" for="searchMasoko">Masoko</label>
     </div>
     <div class="col-md-3"></div>
@@ -44,10 +45,88 @@
 
 @if (Model != null)
 {
-    foreach (var product in Model)
+    if (Model.Count > 0)
     {
-        <p> @product.ProductName </p>
-        <p> @product.Price </p>
-        <p> @product.ImageUrl </p>
+        string url = ViewData["searchUrl"].ToString();
+        <div class="card-deck">
+
+            @foreach (var product in Model)
+            {
+                int titleLength = product.ProductName.Length < 30 ? product.ProductName.Length : 30;
+                var ellipsis = titleLength == 30 ? "..." : "";
+                var trackedItem = new CouponsKE.Models.TrackedPrice()
+                {
+                    DesiredPrice = product.Price,
+                    LowestPrice = product.Price,
+                    StoreWithLowestPrice = product.StoreName,
+                    ProductID = product.ProductID
+                };
+                <form asp-action="Save">
+                    <div class="card h-100" style="max-width:250px">
+                        <img src="@product.ImageUrl" alt="@product.ProductName" class="card-img-top img-fluid" />
+                        <div class="card-body">
+                            <h4 class="card-title" title="@product.ProductName">@product.ProductName.Substring(0, titleLength)@ellipsis</h4>
+                            <p class="card-text"><strong>KSh. @product.Price</strong></p>
+                        </div>
+                        <div class="card-footer clearfix text-center">
+                            <button class="btn btn-success float-right" type="submit"> Track </button>
+                            <a href="@product.StoreLink" target="_blank" class="btn btn-outline-info float-left">@product.StoreName&rarr;</a>
+                        </div>
+                    </div>
+                    <input type="hidden" name="productUrl" value="@product.StoreLink" />
+                    <input type="hidden" name="desiredPrice" value="@trackedItem.DesiredPrice" />
+                    <input type="hidden" name="lowestPrice" value="@trackedItem.LowestPrice" />
+                    <input type="hidden" name="storeWithLowestPrice" value="@trackedItem.StoreWithLowestPrice" />
+                </form>
+                @if (cardCounter % 4 == 0)
+                {
+                    @Html.Raw("\n</div>\n")
+                    @Html.Raw("\n<div class=\"card-deck\">\n")
+                }
+                cardCounter++;
+            }
+        </div>
+        <div class="text-right">
+            <a href="@url" target="_blank" class="btn btn-info">See full results &rarr;</a>
+        </div>
     }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            <strong>No results.</strong> Try changing your search terms or use a product link instead.
+        </div>
+    }
+}
+else
+{
+    <div class="card-deck">
+        <div class="card border-dark mb-3" style="max-width: 18rem;">
+            <div class="card-header">Step 1</div>
+            <div class="card-body text-dark">
+                <h5 class="card-title">Find your product</h5>
+                <p class="card-text">Type the product name you want (e.g. "Macbook Pro") into the search bar and press enter.<p>
+            </div>
+        </div>
+        <div class="card border-dark mb-3" style="max-width: 18rem;">
+            <div class="card-header">Step 2</div>
+            <div class="card-body text-dark">
+                <h5 class="card-title">Select your product</h5>
+                <p class="card-text">When the page is done loading, there will be a list of products. Pick the one that closely matches what you want.<p>
+            </div>
+        </div>
+        <div class="card border-dark mb-3" style="max-width: 18rem;">
+            <div class="card-header">Step 3</div>
+            <div class="card-body text-dark">
+                <h5 class="card-title">Load your product</h5>
+                <p class="card-text">Click track and the product will automatically be loaded. You will be able to see more details here.<p>
+            </div>
+        </div>
+        <div class="card border-dark mb-3" style="max-width: 18rem;">
+            <div class="card-header">Step 4</div>
+            <div class="card-body text-dark">
+                <h5 class="card-title">Start tracking!</h5>
+                <p class="card-text">Type in your desired price and press enter. When the price drops that low you'll be the first to know!<p>
+            </div>
+        </div>
+    </div>
 }
