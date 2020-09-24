@@ -67,6 +67,9 @@ namespace CoupnsKE.Controllers
                 return NotFound();
             }
 
+            var product = await _context.Product.FirstOrDefaultAsync(m => m.ProductID == trackedPrice.ProductID);
+            ViewData["product"] = product;
+
             return View(trackedPrice);
         }
 
@@ -79,6 +82,26 @@ namespace CoupnsKE.Controllers
         // POST: TrackedPrices/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Save(string productUrl, decimal desiredPrice, decimal lowestPrice, string storeWithLowestPrice)
+        {
+            var trackedPrice = new TrackedPrice();
+            trackedPrice.TrackedPriceID = Guid.NewGuid();
+            trackedPrice.UserID = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result.Id;
+            var product = await GetProductFromUrl(productUrl);
+            trackedPrice.ProductID = product.ProductID;
+            trackedPrice.DesiredPrice = desiredPrice;
+            trackedPrice.LowestPrice = lowestPrice;
+            trackedPrice.StoreWithLowestPrice = storeWithLowestPrice;
+            _context.Add(trackedPrice);
+            await _context.SaveChangesAsync();
+            var id = trackedPrice.TrackedPriceID;
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+
+
         [HttpPost]
         public async Task<IActionResult> Create(string searchString)
         {
@@ -98,6 +121,8 @@ namespace CoupnsKE.Controllers
                     }
                 }
             }
+            var referral = new Referrals(url, _context);
+            ViewData["searchUrl"] = referral.ReferralLink();
             var productList = await _scraper.GetMultipleProductsAsync(url, htmlDocument, null, null);
 
             return View(productList);
@@ -208,8 +233,15 @@ namespace CoupnsKE.Controllers
         {
             if (url == null)
                 return View();
+            Product product = await GetProductFromUrl(url);
+            return View(product);
+        }
 
+        private async Task<Product> GetProductFromUrl(string? url)
+        {
             string htmlDocument;
+            if (!url.Contains("https"))
+                url = $"https://{url}";
             using (var client = new HttpClient())
             {
                 using (var response = client.GetAsync(url).Result)
@@ -221,7 +253,7 @@ namespace CoupnsKE.Controllers
                 }
             }
             var product = await _scraper.GetSingleProductAsync(url, htmlDocument);
-            return View(product);
+            return product;
         }
 
         [HttpPost]
