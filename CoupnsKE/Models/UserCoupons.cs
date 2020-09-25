@@ -11,7 +11,7 @@ namespace CouponsKE.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public string UserID { get; set; }
-        public List<Coupon> Coupons { get; set; }
+        public Guid CouponID { get; set; }
 
     }
 }
