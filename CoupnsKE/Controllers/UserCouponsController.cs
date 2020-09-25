@@ -24,7 +24,14 @@ namespace CoupnsKE.Controllers
         // GET: UserCoupons
         public async Task<IActionResult> Index()
         {
-            return View(await _context.UserCoupons.ToListAsync());
+            var userCoupons = await _context.UserCoupons.ToListAsync();
+            List<Coupon> coupons = new List<Coupon>();
+            foreach (var saved in userCoupons)
+            {
+                coupons = saved.Coupons;
+            }
+            ViewData["coupons"] = coupons;
+            return View(userCoupons);
         }
 
         // GET: UserCoupons/Details/5
