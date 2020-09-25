@@ -179,22 +179,27 @@ namespace CoupnsKE.Controllers
             var hasSavedCoupons = _context.UserCoupons.Where(x => x.UserID == user);
             if (hasSavedCoupons.Any())
             {
-                var existingSavedCoupons = hasSavedCoupons.FirstOrDefault();
-                if (existingSavedCoupons.Coupons.Where(x => x.CouponID == couponID).Any())
+                //var existingSavedCoupons = hasSavedCoupons.FirstOrDefault();
+                if (hasSavedCoupons.Where(x => x.CouponID == couponID).Any())
                 {
                     return RedirectToAction("Index", "UserCoupons");
                 }
                 else
                 {
-                    existingSavedCoupons.Coupons.Add(coupon);
+                    var newCoupon = new UserCoupons()
+                    {
+                        CouponID = couponID,
+                        UserID = user
+                    };
+                    _context.UserCoupons.Add(newCoupon);
                 }
-                _context.Update(existingSavedCoupons);
+                //_context.Update(existingSavedCoupons);
             }
             else
             {
                 var userCoupon = new UserCoupons
                 {
-                    Coupons = new List<Coupon> { coupon },
+                    CouponID = couponID,
                     UserID = user
                 };
                 _context.UserCoupons.Add(userCoupon);

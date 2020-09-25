@@ -28,7 +28,8 @@ namespace CoupnsKE.Controllers
             List<Coupon> coupons = new List<Coupon>();
             foreach (var saved in userCoupons)
             {
-                coupons = saved.Coupons;
+                var coupon = await _context.Coupon.FindAsync(saved.CouponID);
+                coupons.Add(coupon);
             }
             ViewData["coupons"] = coupons;
             return View(userCoupons);
