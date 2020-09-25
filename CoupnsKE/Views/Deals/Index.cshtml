@@ -4,62 +4,62 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DealName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DealDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DealRating)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Store)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OldPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewPrice)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DealName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DealDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DealRating)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Store)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OldPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NewPrice)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DealsID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DealsID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DealsID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<h4>Deals from Jumia</h4>
+<hr />
+<h5>Super Sneaker Thursday</h5>
+<div class="col16">
+    <div class="card">
+        <div class="-df -pvs -phxs">
+            <a data-id="catalog_mlpDefault_mlp:Sneaker_Thursdays_14627_en_KE_Camp_Sneakers_SB"
+               data-name="Camp_Sneakers_SB"
+               data-creative="https://ke.jumia.is/cms/2020/W34/SneT/KE_Fashion_0820_S_1152_x_252.jpg"
+               data-position="bannerfloor_1" data-track-onclick="eecPromo" data-track-onview="eecPromo"
+               href="https://www.jumia.co.ke/mlp-sneaker-thursdays/?source=SX_W39_SneakerThurs">
+                <div class="ar _32-7">
+                    <img data-src="https://ke.jumia.is/cms/2020/W34/SneT/KE_Fashion_0820_S_1152_x_252.jpg"
+                         src="https://ke.jumia.is/cms/2020/W34/SneT/KE_Fashion_0820_S_1152_x_252.jpg" class="-rad4"
+                         alt="Sneakers">
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<hr />
+<h5>Fragrance Sale</h5>
+<div class="col16 -pvs">
+    <div class="card -oh">
+        <div>
+            <a class="-fw -mhxs"
+               data-id="catalog_mlpDefault_mlp:Glow_Up_7796_en_KE_CP_HeathBeauty_SB" data-name="CP_HeathBeauty_SB"
+               data-creative="https://ke.jumia.is/cms/2020/CP/W39/KE_Beauty_W38_0920_S_SB_1152x252_SB.jpg"
+               data-position="bannerfloor_1" data-track-onclick="eecPromo" data-track-onview="eecPromo"
+               href="https://www.jumia.co.ke/mlp-glow-up/fragrances-allgenders/?source=SX_W39_Beauty">
+                <div class="ar _32-7">
+                    <img data-src="https://ke.jumia.is/cms/2020/CP/W39/KE_Beauty_W38_0920_S_SB_1152x252_SB.jpg"
+                         src="https://ke.jumia.is/cms/2020/CP/W39/KE_Beauty_W38_0920_S_SB_1152x252_SB.jpg" class="-rad4"
+                         alt="Look Good">
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<hr />
+<h5>Revlon Sale</h5>
+<div class="col16 -pvs">
+    <div class="card -oh">
+        <div class="-df -pvs -phxs">
+            <a class="-fw -mhxs"
+               data-id="catalog_mlpDefault_mlp:Revlon_Official_Store_7808_en_KE_Revlon_SIS_SB1"
+               data-name="Revlon_SIS_SB1"
+               data-creative="https://ke.jumia.is/cms/2020/W25/sis/New-Revlon-Shop-Banner.png"
+               data-position="bannerfloor_1" data-track-onclick="eecPromo" data-track-onview="eecPromo"
+               href="https://www.jumia.co.ke/mlp-revlon-official-store/?source=SX_W39_Revlon">
+                <div class="ar _32-7">
+                    <img data-src="https://ke.jumia.is/cms/2020/W25/sis/New-Revlon-Shop-Banner.png"
+                         src="https://ke.jumia.is/cms/2020/W25/sis/New-Revlon-Shop-Banner.png" class="-rad4"
+                         alt="Revlon">
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

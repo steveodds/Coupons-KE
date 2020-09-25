@@ -2,34 +2,65 @@
 
 @{
     ViewData["Title"] = "Index";
+    var coupons = (List<CouponsKE.Models.Coupon>)ViewData["coupons"];
+    var cardCounter = 1;
 }
 
-<h1>Index</h1>
+<h4>My Coupons</h4>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a href="/Coupons">All Coupons</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.UserID)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserID)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="card-deck">
+    @foreach (var coupon in coupons)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title text-center"><img src="~/img/icons/jumia.png" width="50" height="50" alt="@coupon.Store Coupon">@Html.DisplayFor(modelItem => coupon.StoreSeller)</h4>
+                <h4 class="card-title">@Html.DisplayFor(modelItem => coupon.Description)</h4>
+                <p class="card-text">@Html.DisplayFor(modelItem => coupon.Restrictions). Expires on: @Html.DisplayFor(modelItem => coupon.ExpiryDate).</p>
+                <p class="card-text text-info">Type: @Html.DisplayFor(modelItem => coupon.CouponCategory)</p>
+                <p class="card-text"><small class="text-muted">Only valid on @Html.DisplayFor(modelItem => coupon.Store).</small></p>
+            </div>
+            <div class="card-footer clearfix text-center">
+                <form asp-action="SaveCoupon">
+                    <a class="btn btn-primary text-white float-left" data-toggle="modal" data-target="#couponModal-@cardCounter"> USE &rarr;</a>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="couponModal-@cardCounter" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">@Html.DisplayFor(modelItem => coupon.Store) Coupon</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Copy the following code. Pick a product from the next page and use the code at checkout.</p>
+                        <p>
+                            <h1>
+                                <strong>
+                                    <input type="text" readonly class="form-control-plaintext" id="couponCode" value="@Html.DisplayFor(modelItem => coupon.CouponCode)">
+                                </strong>
+                            </h1>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <a target="_blank" href="@Html.DisplayFor(modelItem => coupon.CouponUrl)" class="btn btn-primary">Launch @Html.DisplayFor(modelItem => coupon.Store)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (cardCounter % 3 == 0)
+        {
+            @Html.Raw("\n</div>\n")
+            @Html.Raw("\n<div class=\"card-deck\">\n")
+        }
+
+        cardCounter++;
+    }
+</div>
