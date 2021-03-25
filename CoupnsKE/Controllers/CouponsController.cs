@@ -26,7 +26,9 @@ namespace CoupnsKE.Controllers
             _context = context;
             _userManager = userManager;
             _contextAccessor = contextAccessor;
-            isAuthorized = _userManager.GetUserAsync(_contextAccessor.HttpContext.User).Result.UserRole == Enum.Roles.Administrator;
+            var user = _contextAccessor.HttpContext.User;
+            var result = _userManager.GetUserAsync(user).Result;
+            isAuthorized = result is null ? false : result.UserRole == Enum.Roles.Administrator;
         }
 
         // GET: Coupons
