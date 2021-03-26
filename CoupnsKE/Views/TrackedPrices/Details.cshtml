@@ -10,37 +10,42 @@
 <div>
     <h4>@product.ProductName</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            <img src="@product.ImageUrl" style="height:250px" alt="@product.ProductName" />
-        </dt>
-        <dd class="col-sm-10">
-        </dd>
-        <dt class="col-sm-2">
-            Description
-        </dt>
-        <dd class="col-sm-10">
-            @product.ProductDescription
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LowestPrice)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LowestPrice)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.StoreWithLowestPrice)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.StoreWithLowestPrice)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DesiredPrice)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DesiredPrice)
-        </dd>
-    </dl>
+    <form asp-action="Delete">
+        <dl class="row">
+            <dt class="col-sm-2">
+                <img src="@product.ImageUrl" style="height:250px" alt="@product.ProductName" />
+            </dt>
+            <dd class="col-sm-10">
+            </dd>
+            <dt class="col-sm-2">
+                Description
+            </dt>
+            <dd class="col-sm-10">
+                @product.ProductDescription
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.LowestPrice)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.LowestPrice)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.StoreWithLowestPrice)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.StoreWithLowestPrice)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DesiredPrice)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DesiredPrice)
+            </dd>
+            <dt class="col-sm-2">
+                <button class="btn btn-outline-danger" type="submit">DELETE</button>
+            </dt>
+        </dl>
+    </form>
 </div>
 <form asp-action="Index">
     <input type="hidden" name="productID" value="@product.ProductID" />
