@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using CoupnsKE.Services;
 using CoupnsKE.Services.Web.Interfaces;
 using CoupnsKE.Services.Web.Scraper;
+using kedzior.io.ConnectionStringConverter;
 
 namespace CoupnsKE
 {
@@ -32,9 +33,10 @@ namespace CoupnsKE
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb");
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseMySql(
+                    AzureMySQL.ToMySQLStandard(connectionString)));
             services.AddDefaultIdentity<Areas.Identity.Data.CoupnsKEUser>(options => { 
                 options.SignIn.RequireConfirmedAccount = true;
                 options.User.RequireUniqueEmail = true;
