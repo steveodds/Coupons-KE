@@ -31,6 +31,12 @@ namespace CoupnsKE.Services.Web.Scraper
             return $"{refWrappers[0]}{modifiedURL}{refWrappers[1]}";
         }
 
+        public string StripReferralLink(string url)
+        {
+            //TODO Add functionality to remove referral to use when scraping
+            throw new NotImplementedException();
+        }
+
         private string[] GetLinkWrappers(string url)
         {
             var store = LinkStore(url);
