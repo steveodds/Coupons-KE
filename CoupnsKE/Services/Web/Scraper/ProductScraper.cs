@@ -36,8 +36,10 @@ namespace CoupnsKE.Services.Web.Scraper
             var results = document.All.Where(m => m.LocalName == "article" && m.ClassList.Contains("prd"));
             foreach (var result in results)
             {
-                var temp = new Product();
-                temp.SKU = result.Children[0].GetAttribute("data-id");
+                var temp = new Product
+                {
+                    SKU = result.Children[0].GetAttribute("data-id")
+                };
                 if (temp.SKU is null)
                     continue;
                 temp.ProductCategory = result.Children[0].GetAttribute("data-category");
