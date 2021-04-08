@@ -1,6 +1,7 @@
 ﻿using System;
 using CoupnsKE.Areas.Identity.Data;
 using CoupnsKE.Data;
+using kedzior.io.ConnectionStringConverter;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -15,10 +16,11 @@ namespace CoupnsKE.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
+            string connectionString = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb");
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<CoupnsKEContext>(options =>
-                    options.UseSqlServer(
-                        context.Configuration.GetConnectionString("CoupnsKEContextConnection")));
+                    options.UseMySql(
+                        AzureMySQL.ToMySQLStandard(connectionString)));
 
                 //services.AddDefaultIdentity<CoupnsKEUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 //    .AddEntityFrameworkStores<CoupnsKEContext>();
