@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using CoupnsKE.Data;
 using Microsoft.AspNetCore.Identity;
 using CoupnsKE.Areas.Identity.Data;
+using kedzior.io.ConnectionStringConverter;
 
 namespace CoupnsKE.Controllers
 {
@@ -38,6 +39,7 @@ namespace CoupnsKE.Controllers
         public IActionResult Index()
         {
             IsLoggedIn = _signInManager.IsSignedIn(User);
+            ViewData["conn"] = $"{Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb")} | {AzureMySQL.ToMySQLStandard(Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb"))}";
             ViewData["status"] = IsLoggedIn;
             if (IsLoggedIn)
             {
