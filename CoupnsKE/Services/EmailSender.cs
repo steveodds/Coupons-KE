@@ -17,6 +17,7 @@ namespace CoupnsKE.Services
 
         public Task Execute(string subject, string message, string email)
         {
+            //TODO Use env vairable for api
             var client = new RestClient();
             client.BaseUrl = new Uri("https://api.eu.mailgun.net/v3/mail.couponske.codes");
             client.Authenticator = new HttpBasicAuthenticator("api", Environment.GetEnvironmentVariable("MailgunAPI"));
