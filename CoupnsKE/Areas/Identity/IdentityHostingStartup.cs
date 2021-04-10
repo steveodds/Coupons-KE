@@ -16,7 +16,7 @@ namespace CoupnsKE.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
-            string connectionString = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb");
+            string connectionString = Environment.GetEnvironmentVariable("IDENTITYCON_localdb");
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<CoupnsKEContext>(options =>
                     options.UseMySql(
