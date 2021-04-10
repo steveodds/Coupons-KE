@@ -39,7 +39,8 @@ namespace CoupnsKE.Controllers
         public IActionResult Index()
         {
             IsLoggedIn = _signInManager.IsSignedIn(User);
-            //ViewData["conn"] = $"{Environment.GetEnvironmentVariable("IDENTITYCON_localdb")} | {AzureMySQL.ToMySQLStandard(Environment.GetEnvironmentVariable("IDENTITYCON_localdb"))}";
+            ViewData["conn"] = $"{Environment.GetEnvironmentVariable("IDENTITYCON_localdb")} | {AzureMySQL.ToMySQLStandard(Environment.GetEnvironmentVariable("IDENTITYCON_localdb"))}";
+            ViewData["main"] = $"{Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb")} | {AzureMySQL.ToMySQLStandard(Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb"))}";
             ViewData["status"] = IsLoggedIn;
             if (IsLoggedIn)
             {
