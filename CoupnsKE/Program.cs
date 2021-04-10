@@ -23,19 +23,6 @@ namespace CoupnsKE
             {
                 var services = scope.ServiceProvider;
 
-                var dbUpdate = Environment.GetEnvironmentVariable("DB_Update");
-
-                if (dbUpdate == "true")
-                {
-                    var db = scope.ServiceProvider.GetRequiredService<Data.ApplicationDbContext>();
-                    var db_Identity = scope.ServiceProvider.GetRequiredService<Data.CoupnsKEContext>();
-                    db.Database.Migrate();
-                    db_Identity.Database.Migrate();
-                }
-
-
-
-
                 try
                 {
                     Models.SeedData.Initialize(services);

@@ -37,7 +37,8 @@ namespace CoupnsKE
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
                     AzureMySQL.ToMySQLStandard(connectionString)));
-            services.AddDefaultIdentity<Areas.Identity.Data.CoupnsKEUser>(options => { 
+            services.AddDefaultIdentity<Areas.Identity.Data.CoupnsKEUser>(options =>
+            {
                 options.SignIn.RequireConfirmedAccount = true;
                 options.User.RequireUniqueEmail = true;
             })
@@ -84,6 +85,17 @@ namespace CoupnsKE
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            var dbUpdate = Environment.GetEnvironmentVariable("DB_Update");
+
+            if (dbUpdate == "true")
+            {
+                using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+                {
+                    scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
+                    scope.ServiceProvider.GetRequiredService<CoupnsKEContext>().Database.Migrate();
+                }
+            }
         }
     }
 }
