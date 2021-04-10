@@ -86,16 +86,16 @@ namespace CoupnsKE
                 endpoints.MapRazorPages();
             });
 
-            //var dbUpdate = Environment.GetEnvironmentVariable("DB_Update");
+            var dbUpdate = Environment.GetEnvironmentVariable("DB_Update");
 
-            //if (dbUpdate == "true")
-            //{
-            //    using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            //    {
-            //        scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
-            //        scope.ServiceProvider.GetRequiredService<CoupnsKEContext>().Database.Migrate();
-            //    }
-            //}
+            if (dbUpdate == "true")
+            {
+                using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+                {
+                    scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
+                    scope.ServiceProvider.GetRequiredService<CoupnsKEContext>().Database.Migrate();
+                }
+            }
         }
     }
 }
