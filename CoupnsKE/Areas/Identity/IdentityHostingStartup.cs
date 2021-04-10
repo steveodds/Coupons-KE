@@ -16,11 +16,12 @@ namespace CoupnsKE.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
-            string connectionString = Environment.GetEnvironmentVariable("IDENTITYCON_localdb");
+            string connectionString = Environment.GetEnvironmentVariable("MYSQLCONNSTR_localdb");
+            var updatedString = connectionString.Replace("localdb", "IDENTITYCON_localdb");
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<CoupnsKEContext>(options =>
                     options.UseMySql(
-                        AzureMySQL.ToMySQLStandard(connectionString)));
+                        AzureMySQL.ToMySQLStandard(updatedString)));
 
                 //services.AddDefaultIdentity<CoupnsKEUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 //    .AddEntityFrameworkStores<CoupnsKEContext>();
