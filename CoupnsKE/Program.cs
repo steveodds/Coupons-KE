@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,12 +16,25 @@ namespace CoupnsKE
         public static void Main(string[] args)
         {
             //CreateHostBuilder(args).Build().Run();
-            
+
             var host = CreateHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+
+                var dbUpdate = Environment.GetEnvironmentVariable("DB_Update");
+
+                if (dbUpdate == "true")
+                {
+                    var db = scope.ServiceProvider.GetRequiredService<Data.ApplicationDbContext>();
+                    var db_Identity = scope.ServiceProvider.GetRequiredService<Data.CoupnsKEContext>();
+                    db.Database.Migrate();
+                    db_Identity.Database.Migrate();
+                }
+
+
+
 
                 try
                 {

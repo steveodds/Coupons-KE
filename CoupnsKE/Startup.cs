@@ -42,7 +42,6 @@ namespace CoupnsKE
                 options.User.RequireUniqueEmail = true;
             })
                 .AddEntityFrameworkStores<CoupnsKEContext>();
-
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IScraper, ProductScraper>();
 
