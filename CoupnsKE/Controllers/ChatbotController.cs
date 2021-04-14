@@ -68,9 +68,9 @@ namespace CoupnsKE.Controllers
 
         [HttpGet]
         [Route("/WeatherInfo")]
-        public ActionResult WeatherInfo([FromQuery] string location)
+        public ActionResult WeatherInfo([FromQuery] string token)
         {
-            var result = WeatherData(location);
+            var result = WeatherData(token);
             //result = result.Remove(0, 1);
             //result = result.Remove(result.Length - 1, 1);
             var structuredResult = JObject.Parse(result);
