@@ -32,14 +32,14 @@ namespace CoupnsKE.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Index([FromQuery] string challenge)
         {
-            var request = _contextAccessor.HttpContext.Request;
+            
+            //var request = _contextAccessor.HttpContext.Request;
 
-            var obj = GetRequestBodyAsync(request);
+            //var obj = GetRequestBodyAsync(request);
 
-            throw new Exception($"req ==> [{obj.Result}]");
-            //return Ok(obj);
+            return Ok(challenge is null ? "OK" : challenge);
         }
 
         private async Task<string> GetRequestBodyAsync(HttpRequest request)
