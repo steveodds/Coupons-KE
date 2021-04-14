@@ -38,7 +38,7 @@ namespace CoupnsKE.Controllers
 
             var obj = GetRequestBodyAsync(request);
 
-            throw new Exception($"req ==> [{obj}]");
+            throw new Exception($"req ==> [{obj.Result}]");
             //return Ok(obj);
         }
 
