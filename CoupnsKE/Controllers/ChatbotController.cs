@@ -21,9 +21,23 @@ namespace CoupnsKE.Controllers
 
         private class Weather
         {
+            public string location { get; set; }
             public string weather { get; set; }
             public string weatherDescription { get; set; }
             public string temperature { get; set; }
+        }
+
+
+        public class ChatbotResponse
+        {
+            public Respons[] responses { get; set; }
+        }
+
+        public class Respons
+        {
+            public string type { get; set; }
+            public int delay { get; set; }
+            public string message { get; set; }
         }
 
         public ChatbotController(IHttpContextAccessor contextAccessor)
@@ -34,36 +48,12 @@ namespace CoupnsKE.Controllers
         [HttpGet]
         public ActionResult Index([FromQuery] string challenge)
         {
-            
+
             //var request = _contextAccessor.HttpContext.Request;
 
             //var obj = GetRequestBodyAsync(request);
 
             return Ok(challenge is null ? "OK" : challenge);
-        }
-
-        private async Task<string> GetRequestBodyAsync(HttpRequest request)
-        {
-
-            string objRequestBody;
-
-            // IMPORTANT: Ensure the requestBody can be read multiple times.
-            HttpRequestRewindExtensions.EnableBuffering(request);
-
-            // IMPORTANT: Leave the body open so the next middleware can read it.
-            using (StreamReader reader = new StreamReader(
-                request.Body,
-                Encoding.UTF8,
-                detectEncodingFromByteOrderMarks: false,
-                leaveOpen: true))
-            {
-                string strRequestBody = await reader.ReadToEndAsync();
-                objRequestBody = strRequestBody;
-
-                // IMPORTANT: Reset the request body stream position so the next middleware can read it
-                request.Body.Position = 0;
-            }
-            return objRequestBody;
         }
 
         [HttpPost]
@@ -76,14 +66,31 @@ namespace CoupnsKE.Controllers
             var structuredResult = JObject.Parse(result);
             var weatherObject = new Weather
             {
+                location = token,
                 weather = (string)structuredResult["weather"].Select(p => p["main"]).FirstOrDefault(),
                 weatherDescription = (string)structuredResult["weather"].Select(p => p["description"]).FirstOrDefault(),
                 temperature = (string)structuredResult["main"]["temp"]
             };
 
-            result = JsonConvert.SerializeObject(weatherObject, Formatting.Indented);
+            var message = GenerateResponse(weatherObject);
+
+            result = JsonConvert.SerializeObject(message, Formatting.Indented);
 
             return Ok(result);
+        }
+
+
+        private ChatbotResponse GenerateResponse(Weather weather)
+        {
+            var response = new Respons[1];
+            response[0] = new Respons
+            {
+                delay = 1000,
+                type = "text",
+                message = $"The weather at {weather.location} is: '{weather.weather} | {weather.weatherDescription}' with a temperature of {weather.temperature} degrees celsius."
+            };
+
+            return new ChatbotResponse { responses = response };
         }
 
         private string WeatherData(string location)
