@@ -66,8 +66,8 @@ namespace CoupnsKE.Controllers
             return objRequestBody;
         }
 
-        [HttpGet]
-        [Route("/WeatherInfo")]
+        [HttpPost]
+        [ActionName("Index")]
         public ActionResult WeatherInfo([FromQuery] string token)
         {
             var result = WeatherData(token);
