@@ -60,13 +60,12 @@ namespace CoupnsKE.Controllers
         public ActionResult WeatherInfo([FromBody] dynamic content)
         {
             string locationFromRequest = GetUserLocation(content);
-            System.Diagnostics.Trace.TraceInformation($"json ==> [{locationFromRequest}]");
-            var result = WeatherData("nairobi");
+            var result = WeatherData(locationFromRequest);
             //Get only the ecessary weather data and map it into the model
             var structuredResult = JObject.Parse(result);
             var weatherObject = new Weather
             {
-                location = "nairobi",
+                location = locationFromRequest,
                 weather = (string)structuredResult["weather"].Select(p => p["main"]).FirstOrDefault(),
                 weatherDescription = (string)structuredResult["weather"].Select(p => p["description"]).FirstOrDefault(),
                 temperature = (string)structuredResult["main"]["temp"]
@@ -81,7 +80,10 @@ namespace CoupnsKE.Controllers
 
         private string GetUserLocation(dynamic content)
         {
-            return Convert.ToString(content);
+            var parsedJson = JObject.Parse(Convert.ToString(content));
+            var location = (string)parsedJson["attributes"]["default_city"];
+
+            return location;
         }
 
         private ChatbotResponse GenerateResponse(Weather weather)
