@@ -57,28 +57,33 @@ namespace CoupnsKE.Controllers
 
         [HttpPost]
         [ActionName("Index")]
-        public ActionResult WeatherInfo([FromQuery] string token)
+        public ActionResult WeatherInfo([FromBody] dynamic content)
         {
-            var result = WeatherData(token);
+            string locationFromRequest = GetUserLocation(content);
+            var result = WeatherData(locationFromRequest);
             //Get only the ecessary weather data and map it into the model
             var structuredResult = JObject.Parse(result);
             var weatherObject = new Weather
             {
-                location = token,
+                location = locationFromRequest,
                 weather = (string)structuredResult["weather"].Select(p => p["main"]).FirstOrDefault(),
                 weatherDescription = (string)structuredResult["weather"].Select(p => p["description"]).FirstOrDefault(),
                 temperature = (string)structuredResult["main"]["temp"]
             };
 
-            var message = GenerateResponse(weatherObject); //get Chatbot.com compatible response
+            var message = GenerateResponse(weatherObject, result); //get Chatbot.com compatible response
 
             result = JsonConvert.SerializeObject(message, Formatting.Indented);
             //return as json
             return Ok(result);
         }
 
+        private string GetUserLocation(dynamic content)
+        {
+            return Convert.ToString(content);
+        }
 
-        private ChatbotResponse GenerateResponse(Weather weather)
+        private ChatbotResponse GenerateResponse(Weather weather, string result)
         {
             //Convert Weather object to a model that can generate JSON in the format expected by Chatbot.com
             var response = new Respons[1];
@@ -86,7 +91,7 @@ namespace CoupnsKE.Controllers
             {
                 delay = 1000,
                 type = "text",
-                message = $"The weather at {weather.location} is: '{weather.weather} | {weather.weatherDescription}' with a temperature of {weather.temperature} degrees celsius."
+                message = $"The weather at {weather.location} is: '{weather.weather} | {weather.weatherDescription}' with a temperature of {weather.temperature} degrees celsius. \n {result}"
             };
 
             return new ChatbotResponse { responses = response };
