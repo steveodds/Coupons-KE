@@ -19,6 +19,7 @@ namespace CoupnsKE.Controllers
     {
         private readonly IHttpContextAccessor _contextAccessor;
 
+        //Internal models start
         private class Weather
         {
             public string location { get; set; }
@@ -40,6 +41,8 @@ namespace CoupnsKE.Controllers
             public string message { get; set; }
         }
 
+        //Internal models end
+
         public ChatbotController(IHttpContextAccessor contextAccessor)
         {
             _contextAccessor = contextAccessor;
@@ -48,11 +51,7 @@ namespace CoupnsKE.Controllers
         [HttpGet]
         public ActionResult Index([FromQuery] string challenge)
         {
-
-            //var request = _contextAccessor.HttpContext.Request;
-
-            //var obj = GetRequestBodyAsync(request);
-
+            //Chatbot.com verification for enabling webhook | Returns challenge string
             return Ok(challenge is null ? "OK" : challenge);
         }
 
@@ -61,8 +60,7 @@ namespace CoupnsKE.Controllers
         public ActionResult WeatherInfo([FromQuery] string token)
         {
             var result = WeatherData(token);
-            //result = result.Remove(0, 1);
-            //result = result.Remove(result.Length - 1, 1);
+            //Get only the ecessary weather data and map it into the model
             var structuredResult = JObject.Parse(result);
             var weatherObject = new Weather
             {
@@ -72,16 +70,17 @@ namespace CoupnsKE.Controllers
                 temperature = (string)structuredResult["main"]["temp"]
             };
 
-            var message = GenerateResponse(weatherObject);
+            var message = GenerateResponse(weatherObject); //get Chatbot.com compatible response
 
             result = JsonConvert.SerializeObject(message, Formatting.Indented);
-
+            //return as json
             return Ok(result);
         }
 
 
         private ChatbotResponse GenerateResponse(Weather weather)
         {
+            //Convert Weather object to a model that can generate JSON in the format expected by Chatbot.com
             var response = new Respons[1];
             response[0] = new Respons
             {
@@ -95,9 +94,9 @@ namespace CoupnsKE.Controllers
 
         private string WeatherData(string location)
         {
+            //Call OpenWeather API to get weather data
             var client = new RestClient();
             client.BaseUrl = new Uri("https://api.openweathermap.org/data/2.5/weather");
-            //client.Authenticator = new HttpBasicAuthenticator("api", Environment.GetEnvironmentVariable("MailgunAPI"));
             var request = new RestRequest();
             request.AddParameter("q", location);
             request.AddParameter("units", "metric");
